@@ -1,20 +1,20 @@
 module.exports = function(RED) {
-    function mapNode(config) {
+    function joinNode(config) {
         RED.nodes.createNode(this, config);
         var node = this;
         
-        // Store map parameters from node configuration
-        this.mapExpression = config.mapExpression;
+        // Store join parameters from node configuration
+        this.joinExpression = config.joinExpression;
         
         node.on('input', function(msg) {
             if (msg.payload && typeof msg.payload === 'object') {
-                var mapMethod = {
-                    "type": "map",
-                    "expression": this.mapExpression
+                var joinMethod = {
+                    "type": "join",
+                    "expression": this.joinExpression
                 };
-                node.error(this.mapExpression)
-                // Add map method to Methods array
-                msg.payload.Methods.push(mapMethod);
+                node.error(this.joinExpression)
+                // Add join method to Methods array
+                msg.payload.Methods.push(joinMethod);
                 // Send the modified message
                 node.send(msg);
             } else {
@@ -23,17 +23,17 @@ module.exports = function(RED) {
         });
     }
     
-    RED.nodes.registerType("spark-map", mapNode, {
+    RED.nodes.registerType("spark-join", joinNode, {
         defaults: {
             name: { value: "" },
-            mapExpression: { value: "" }
+            joinExpression: { value: "" }
         },
         category: "spark",
         color: "#E6E0F8",
-        icon: "map.png",
+        icon: "join.png",
         label: function() {
-            return this.name || "spark-map";
+            return this.name || "spark-join";
         },
-        paletteLabel: "map"
+        paletteLabel: "join"
     });
 }

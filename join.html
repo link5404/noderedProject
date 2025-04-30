@@ -1,0 +1,68 @@
+<script type="text/javascript">
+    RED.nodes.registerType('spark-join', {
+        category: 'spark',
+        color: '#E6E0F8',
+        defaults: {
+            name: { value: "" },
+            joinExpression: { value: "", required: true }
+        },
+        inputs: 2,  // Two inputs: left RDD and right RDD
+        outputs: 1,
+        icon: "join.png",
+        label: function() {
+            return this.name || "spark-join";
+        },
+        paletteLabel: "join",
+        inputLabels: ["Left RDD", "Right RDD"],
+        outputLabels: ["Joined RDD"]
+    });
+</script>
+
+<script type="text/html" data-template-name="spark-join">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    
+    <div class="form-row">
+        <label for="node-input-joinExpression"><i class="fa fa-code"></i> Join Expression</label>
+        <input type="text" id="node-input-joinExpression" placeholder="lambda x, y: x[0] == y[0]">
+    </div>
+    
+    <div class="form-tips">
+        Enter a join expression following PySpark format: <code>lambda x, y: x[0] == y[0]</code>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="spark-join">
+    <p>A node that performs a simple join operation between two RDDs.</p>
+    
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>Input 1 - Left RDD <span class="property-type">object</span></dt>
+        <dd>The left RDD for the join operation, expected in msg.payload.</dd>
+        
+        <dt>Input 2 - Right RDD <span class="property-type">object</span></dt>
+        <dd>The right RDD for the join operation, expected in msg.payload.</dd>
+    </dl>
+    
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>The result of joining the two RDDs according to the specified join expression.</dd>
+    </dl>
+    
+    <h3>Details</h3>
+    <p>This node implements a simple join functionality between two RDDs:</p>
+    
+    <ul>
+        <li><b>Join Expression</b>: A lambda function defining the join condition between the two RDDs.</li>
+    </ul>
+    
+    <h3>Examples</h3>
+    <p>Join two datasets on matching ID fields:</p>
+    <pre>lambda x, y: x[0] == y[0]</pre>
+    
+    <p>Join with column names:</p>
+    <pre>lambda x, y: x['id'] == y['id']</pre>
+</script>

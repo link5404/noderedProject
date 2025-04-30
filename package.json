@@ -13,7 +13,8 @@
         "nodes": {
             "filter": "filter.js",
             "map":"map.js",
-            "collect":"collect.js"
+            "collect":"collect.js",
+            "init_rdd":"init_rdd.js"
         }
   }
 }

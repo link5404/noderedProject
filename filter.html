@@ -21,14 +21,10 @@
 
 <script type="text/html" data-template-name="spark-filter">
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-    <div class="form-row">
         <label for="node-input-filterExpression"><i class="fa fa-code"></i> Filter Expression</label>
         <input type="text" id="node-input-filterExpression" placeholder="col > 10">
     </div>
-    <div class="form-tips">Enter a filter expression (e.g., "col > 10" or "col.contains('text')")</div>
+    <div class="form-tips">Enter a filter expression (e.g., "col > 10" or "col.contains('text'), or use a lambda function. lambda x: x[0] > 10")</div>
 </script>
 
 <script type="text/html" data-help-name="spark-filter">

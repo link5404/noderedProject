@@ -1,0 +1,86 @@
+<script type="text/javascript">
+    RED.nodes.registerType('init_rdd', {
+        category: 'spark',
+        color: '#E6E0F8',
+        defaults: {
+            name: { value: "" },
+            rddName: { value: "", required: true },
+            payload: { value: "json", validate: RED.validators.typedInput("payloadType") },
+            payloadType: { value: "json" }
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "file-text.png",
+        label: function() {
+            return this.name || "init_rdd";
+        },
+        paletteLabel: "init rdd",
+        button: {
+            enabled: true,
+            onclick: function() {
+                var node = this;
+                $.ajax({
+                    url: "init_rdd/" + node.id,
+                    type: "POST",
+                    success: function(resp) {
+                        RED.notify("RDD initialized", {type: "success", id: "init_rdd"});
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status == 404) {
+                            RED.notify("Node not deployed", "error");
+                        } else if (jqXHR.status == 500) {
+                            RED.notify("Error initializing RDD: " + errorThrown, "error");
+                        } else if (jqXHR.status == 0) {
+                            RED.notify("Server not responding", "error");
+                        } else {
+                            RED.notify("Unexpected error: " + jqXHR.status + " " + textStatus, "error");
+                        }
+                    }
+                });
+            }
+        },
+        oneditprepare: function() {
+            $("#node-input-payload").typedInput({
+                default: 'json',
+                typeField: $("#node-input-payloadType"),
+                types: ['json']
+            });
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="init_rdd">
+    
+    <div class="form-row">
+        <label for="node-input-rddName"><i class="fa fa-pencil"></i> RDD Name</label>
+        <input type="text" id="node-input-rddName" placeholder="my_rdd">
+    </div>
+    
+</script>
+
+<script type="text/html" data-help-name="init_rdd">
+    <p>Creates a new RDD when the button is pressed or when triggered.</p>
+    
+    <h3>Properties</h3>
+    <dl class="message-properties">
+        <dt>RDD Name <span class="property-type">string</span></dt>
+        <dd>The name to assign to the RDD.</dd>
+        
+        <dt>Payload <span class="property-type">json</span></dt>
+        <dd>Optional initial payload configuration for the RDD. Default is an empty Methods array.</dd>
+    </dl>
+    
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>A JSON object containing the RDD configuration with the format:
+            <pre>{
+  "Rdd-Name": "name-of-rdd",
+  "Methods": []
+}</pre>
+        </dd>
+    </dl>
+    
+    <h3>Details</h3>
+    <p>This node can be used to initialize a new RDD for Spark operations. The button on the node can be pressed to manually trigger the RDD creation, or it can be triggered by an incoming message.</p>
+</script>
