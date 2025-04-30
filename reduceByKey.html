@@ -1,0 +1,45 @@
+<script type="text/javascript">
+    RED.nodes.registerType('spark-reduceByKey', {
+        category: 'spark',
+        color: '#E6E0F8',
+        defaults: {
+            name: { value: "" },
+            reduceByKeyExpression: { value: "", required: true }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "reduceByKey.png",
+        label: function() {
+            return this.name || "spark-reduceByKey";
+        },
+        paletteLabel: "reduceByKey",
+        oneditprepare: function() {
+            // Optional: Add any initialization code for your edit dialog here
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="spark-reduceByKey">
+    <div class="form-row">
+        <label for="node-input-reduceByKeyExpression"><i class="fa fa-code"></i> ReduceByKey Expression</label>
+        <input type="text" id="node-input-reduceByKeyExpression" placeholder="reduceByKey(add)">
+    </div>
+    <div class="form-tips">Enter a reduceByKey expression (e.g., "reduceByKey(add)" or "reduceByKey(lambda a,b: a+b)")</div>
+</script>
+
+<script type="text/html" data-help-name="spark-reduceByKey">
+    <p>A node that adds a reduceByKey operation to Spark operations JSON.</p>
+    <p>This node appends a reduceByKey method to the "Methods" array in the message payload.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object</span></dt>
+        <dd>The JSON object containing a "Methods" array to which the reduceByKey operation will be added.</dd>
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object</span></dt>
+        <dd>The modified JSON object with the reduceByKey operation added to the "Methods" array.</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>Use this node to add reduceByKey criteria to your Spark operations. The reduceByKey expression should be a valid condition that will be translated to a Spark reduceByKey operation.</p>
+</script>

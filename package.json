@@ -15,7 +15,8 @@
             "map":"map.js",
             "collect":"collect.js",
             "init_rdd":"init_rdd.js",
-            "join":"join.js"
+            "join":"join.js",
+            "reduceByKey":"reduceByKey.js"
         }
   }
 }
