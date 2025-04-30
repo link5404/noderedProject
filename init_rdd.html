@@ -8,7 +8,7 @@
             payload: { value: "json", validate: RED.validators.typedInput("payloadType") },
             payloadType: { value: "json" }
         },
-        inputs: 0,
+        inputs: 1,  // Changed to 1 to allow input triggering
         outputs: 1,
         icon: "file-text.png",
         label: function() {
@@ -50,12 +50,15 @@
 </script>
 
 <script type="text/html" data-template-name="init_rdd">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
     
     <div class="form-row">
         <label for="node-input-rddName"><i class="fa fa-pencil"></i> RDD Name</label>
         <input type="text" id="node-input-rddName" placeholder="my_rdd">
     </div>
-    
 </script>
 
 <script type="text/html" data-help-name="init_rdd">
@@ -65,9 +68,12 @@
     <dl class="message-properties">
         <dt>RDD Name <span class="property-type">string</span></dt>
         <dd>The name to assign to the RDD.</dd>
-        
-        <dt>Payload <span class="property-type">json</span></dt>
-        <dd>Optional initial payload configuration for the RDD. Default is an empty Methods array.</dd>
+    </dl>
+    
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>msg.rddName <span class="property-type">string</span></dt>
+        <dd>Optional. If provided, overrides the RDD name configured in the node.</dd>
     </dl>
     
     <h3>Outputs</h3>
@@ -83,4 +89,5 @@
     
     <h3>Details</h3>
     <p>This node can be used to initialize a new RDD for Spark operations. The button on the node can be pressed to manually trigger the RDD creation, or it can be triggered by an incoming message.</p>
+    <p>Press the button multiple times to generate new RDD initialization messages.</p>
 </script>

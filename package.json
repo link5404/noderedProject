@@ -14,7 +14,8 @@
             "filter": "filter.js",
             "map":"map.js",
             "collect":"collect.js",
-            "init_rdd":"init_rdd.js"
+            "init_rdd":"init_rdd.js",
+            "join":"join.js"
         }
   }
 }

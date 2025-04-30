@@ -1,27 +1,33 @@
 <script type="text/javascript">
-    RED.nodes.registerType('spark-join', {
+    RED.nodes.registerType('rdd_join', {
         category: 'spark',
         color: '#E6E0F8',
         defaults: {
             name: { value: "" },
+            joinedRddName: { value: "joined_rdd", required: true },
             joinExpression: { value: "", required: true }
         },
         inputs: 2,  // Two inputs: left RDD and right RDD
         outputs: 1,
         icon: "join.png",
         label: function() {
-            return this.name || "spark-join";
+            return this.name || "rdd_join";
         },
-        paletteLabel: "join",
+        paletteLabel: "rdd join",
         inputLabels: ["Left RDD", "Right RDD"],
         outputLabels: ["Joined RDD"]
     });
 </script>
 
-<script type="text/html" data-template-name="spark-join">
+<script type="text/html" data-template-name="rdd_join">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    
+    <div class="form-row">
+        <label for="node-input-joinedRddName"><i class="fa fa-pencil"></i> Joined RDD Name</label>
+        <input type="text" id="node-input-joinedRddName" placeholder="joined_rdd">
     </div>
     
     <div class="form-row">
@@ -34,35 +40,36 @@
     </div>
 </script>
 
-<script type="text/html" data-help-name="spark-join">
-    <p>A node that performs a simple join operation between two RDDs.</p>
+<script type="text/html" data-help-name="rdd_join">
+    <p>A node that joins two RDDs and nests them in a new RDD structure.</p>
     
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt>Input 1 - Left RDD <span class="property-type">object</span></dt>
-        <dd>The left RDD for the join operation, expected in msg.payload.</dd>
+        <dd>The left RDD for the join operation.</dd>
         
         <dt>Input 2 - Right RDD <span class="property-type">object</span></dt>
-        <dd>The right RDD for the join operation, expected in msg.payload.</dd>
+        <dd>The right RDD for the join operation.</dd>
     </dl>
     
     <h3>Outputs</h3>
     <dl class="message-properties">
         <dt>payload <span class="property-type">object</span></dt>
-        <dd>The result of joining the two RDDs according to the specified join expression.</dd>
+        <dd>The result of joining the two RDDs in the following format:
+            <pre>{
+  "Rdd-Name": "joined-name",
+  "Joined-Rdds": [
+    { /* entire left RDD object */ },
+    { /* entire right RDD object */ }
+  ],
+  "Methods": []
+}</pre>
+        </dd>
     </dl>
     
     <h3>Details</h3>
-    <p>This node implements a simple join functionality between two RDDs:</p>
-    
-    <ul>
-        <li><b>Join Expression</b>: A lambda function defining the join condition between the two RDDs.</li>
-    </ul>
-    
-    <h3>Examples</h3>
-    <p>Join two datasets on matching ID fields:</p>
-    <pre>lambda x, y: x[0] == y[0]</pre>
-    
-    <p>Join with column names:</p>
-    <pre>lambda x, y: x['id'] == y['id']</pre>
+    <p>This node takes two RDDs and joins them into a single nested structure. 
+    The entire original RDD objects are preserved in the "Joined-Rdds" array, 
+    including any nested joined RDDs, allowing for recursive joining.
+    A join method is added to the "Methods" array using the provided join expression.</p>
 </script>
