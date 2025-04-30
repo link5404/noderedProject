@@ -1,0 +1,49 @@
+<script type="text/javascript">
+    RED.nodes.registerType('spark-map', {
+        category: 'spark',
+        color: '#E6E0F8',
+        defaults: {
+            name: { value: "" },
+            mapExpression: { value: "", required: true }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "map.png",
+        label: function() {
+            return this.name || "spark-map";
+        },
+        paletteLabel: "map",
+        oneditprepare: function() {
+            // Optional: Add any initialization code for your edit dialog here
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="spark-map">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-mapExpression"><i class="fa fa-code"></i> map Expression</label>
+        <input type="text" id="node-input-mapExpression" placeholder="col > 10">
+    </div>
+    <div class="form-tips">Enter a map expression (e.g., "lambda x: (x[a], x[b], x[c], x[d])..." where a,b,c,d are numbers of any index in the row x)</div>
+</script>
+
+<script type="text/html" data-help-name="spark-map">
+    <p>A node that adds a map operation to Spark operations JSON.</p>
+    <p>This node appends a map method to the "Methods" array in the message payload.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object</span></dt>
+        <dd>The JSON object containing a "Methods" array to which the map operation will be added.</dd>
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object</span></dt>
+        <dd>The modified JSON object with the map operation added to the "Methods" array.</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>Use this node to add maping criteria to your Spark operations. The map expression should be a valid condition that will be translated to a Spark map operation.</p>
+</script>

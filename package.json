@@ -1,5 +1,5 @@
 {
-  "name": "node-red-filter-node",
+  "name": "node-red-custom-nodes",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
@@ -11,7 +11,8 @@
   },
   "node-red" : {
         "nodes": {
-            "filter": "filter.js"
+            "filter": "filter.js",
+            "map":"map.js"
         }
   }
 }
