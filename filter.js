@@ -5,12 +5,14 @@ module.exports = function(RED) {
         
         // Store filter parameters from node configuration
         this.filterExpression = config.filterExpression;
+        this.tableName = config.tableName;
         
         node.on('input', function(msg) {
             if (msg.payload && typeof msg.payload === 'object') {
                 var filterMethod = {
                     "type": "filter",
-                    "expression": this.filterExpression
+                    "expression": this.filterExpression,
+                    "table": this.tableName
                 };
                 
                 // Add filter method to Methods array
@@ -27,7 +29,8 @@ module.exports = function(RED) {
     RED.nodes.registerType("spark-filter", FilterNode, {
         defaults: {
             name: { value: "" },
-            filterExpression: { value: "" }
+            filterExpression: { value: "" , required: true},
+            tableName: { value: "", required: true }
         },
         category: "spark",
         color: "#E6E0F8",
@@ -36,5 +39,5 @@ module.exports = function(RED) {
             return this.name || "spark-filter";
         },
         paletteLabel: "filter"
-    });
+    })
 }
