@@ -4,13 +4,14 @@ module.exports = function(RED) {
         var node = this;
         
         // Store collect parameters from node configuration
-        this.collectExpression = config.collectExpression;
+        this.collectTable = config.collectTable;
         
         node.on('input', function(msg) {
 
             if (msg.payload && typeof msg.payload === 'object') {
                 var collectMethod = {
                     "type": "collect",
+                    "table": this.collectTable
                 };
 
                 // Add collect method to Methods array
@@ -28,7 +29,7 @@ module.exports = function(RED) {
     RED.nodes.registerType("spark-collect", CollectNode, {
         defaults: {
             name: { value: "" },
-            collectExpression: { value: "" }
+            collectTable: { value: "", required: true }
         },
         category: "spark",
         color: "#E6E0F8",

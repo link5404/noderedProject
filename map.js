@@ -5,12 +5,14 @@ module.exports = function(RED) {
         
         // Store map parameters from node configuration
         this.mapExpression = config.mapExpression;
+        this.mapTable = config.mapTable;
         
         node.on('input', function(msg) {
             if (msg.payload && typeof msg.payload === 'object') {
                 var mapMethod = {
                     "type": "map",
-                    "expression": this.mapExpression
+                    "expression": this.mapExpression,
+                    "table": this.mapTable
                 };
                 node.error(this.mapExpression)
                 // Add map method to Methods array
@@ -26,7 +28,8 @@ module.exports = function(RED) {
     RED.nodes.registerType("spark-map", mapNode, {
         defaults: {
             name: { value: "" },
-            mapExpression: { value: "" }
+            mapExpression: { value: "" },
+            mapTable: { value: "", required: true }
         },
         category: "spark",
         color: "#E6E0F8",

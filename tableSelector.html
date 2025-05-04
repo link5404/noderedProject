@@ -1,0 +1,128 @@
+<script type="text/javascript">
+    RED.nodes.registerType('spark-table-selector', {
+        category: 'spark',
+        color: '#E6E0F8',
+        defaults: {
+            name: { value: "" },
+            selectedTables: { value: "[]", required: true }  // Store selected tables as JSON string
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "db.png",
+        label: function() {
+            return this.name || "spark-table-selector";
+        },
+        paletteLabel: "table selector",
+        oneditprepare: function() {
+            var node = this;
+            var selectedTables = [];
+            
+            try {
+                selectedTables = JSON.parse(node.selectedTables);
+            } catch(e) {
+                selectedTables = [];
+            }
+            
+            // Create container for checkboxes
+            const tableListContainer = $('#table-list-container');
+            tableListContainer.empty();
+            
+            // Fetch the list of dataset files
+            $.getJSON('spark-table-selector/datasets', function(data) {
+                if (data.length === 0) {
+                    tableListContainer.append('<div class="form-row"><i>No CSV files found in datasets folder</i></div>');
+                    return;
+                }
+                
+                // Add checkboxes for each table
+                $.each(data, function(i, fileName) {
+                    const checkboxId = 'table-checkbox-' + i;
+                    const isChecked = selectedTables.includes(fileName);
+                    
+                    const checkboxHtml = `
+                        <div class="form-row">
+                            <label for="${checkboxId}" style="width:auto">
+                                <input type="checkbox" id="${checkboxId}" 
+                                       class="table-checkbox" 
+                                       value="${fileName}" 
+                                       ${isChecked ? 'checked' : ''}>
+                                ${fileName}
+                            </label>
+                        </div>
+                    `;
+                    tableListContainer.append(checkboxHtml);
+                });
+                
+                // Add event listeners to track selections
+                $('.table-checkbox').change(function() {
+                    updateSelectedTables();
+                });
+                
+                // Add select all / none buttons
+                const buttonRow = $('<div class="form-row" style="margin-top:5px;"></div>');
+                const selectAllBtn = $('<button type="button" class="ui-button ui-widget ui-corner-all" style="font-size: 0.8em; padding: 3px 8px;">Select All</button>');
+                const selectNoneBtn = $('<button type="button" class="ui-button ui-widget ui-corner-all" style="font-size: 0.8em; padding: 3px 8px; margin-left: 10px;">Select None</button>');
+                
+                selectAllBtn.click(function(e) {
+                    e.preventDefault();
+                    $('.table-checkbox').prop('checked', true);
+                    updateSelectedTables();
+                });
+                
+                selectNoneBtn.click(function(e) {
+                    e.preventDefault();
+                    $('.table-checkbox').prop('checked', false);
+                    updateSelectedTables();
+                });
+                
+                buttonRow.append(selectAllBtn).append(selectNoneBtn);
+                tableListContainer.prepend(buttonRow);
+                
+            }).fail(function() {
+                console.error("Failed to load dataset list");
+                tableListContainer.html('<div class="form-row" style="color: red;">Failed to load datasets. Please check if the datasets folder exists.</div>');
+            });
+            
+            // Function to update the hidden input with selected tables
+            function updateSelectedTables() {
+                const selected = [];
+                $('.table-checkbox:checked').each(function() {
+                    selected.push($(this).val());
+                });
+                $('#node-input-selectedTables').val(JSON.stringify(selected));
+            }
+        },
+        oneditsave: function() {
+            // Nothing extra needed here, the hidden input will be saved automatically
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="spark-table-selector">
+    <div class="form-row">
+        <label style="width:100%;"><i class="fa fa-table"></i> Select Tables</label>
+        <input type="hidden" id="node-input-selectedTables">
+    </div>
+    
+    <div id="table-list-container" style="margin-left: 20px; max-height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
+        <div class="form-row"><i>Loading tables...</i></div>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="spark-table-selector">
+    <p>A node that allows selecting multiple tables to be used in a PySpark pipeline.</p>
+    <p>This node populates the "Tables" array in the message payload with the selected CSV files.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object</span></dt>
+        <dd>The JSON object containing a "Tables" array that will be populated with the selected tables.</dd>
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload<span class="property-type">object</span></dt>
+        <dd>The modified JSON object with the "Tables" array populated with the selected tables.</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>Use this node at the beginning of your Spark flow to define which tables will be used in your pipeline.</p>
+    <p>The list of available tables is automatically populated from your datasets folder.</p>
+</script>

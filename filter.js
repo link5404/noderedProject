@@ -5,14 +5,14 @@ module.exports = function(RED) {
         
         // Store filter parameters from node configuration
         this.filterExpression = config.filterExpression;
-        this.tableName = config.tableName;
+        this.filterTable = config.filterTable;
         
         node.on('input', function(msg) {
             if (msg.payload && typeof msg.payload === 'object') {
                 var filterMethod = {
                     "type": "filter",
                     "expression": this.filterExpression,
-                    "table": this.tableName
+                    "table": this.filterTable
                 };
                 
                 // Add filter method to Methods array
@@ -30,7 +30,7 @@ module.exports = function(RED) {
         defaults: {
             name: { value: "" },
             filterExpression: { value: "" , required: true},
-            tableName: { value: "", required: true }
+            filterTable: { value: "", required: true }
         },
         category: "spark",
         color: "#E6E0F8",

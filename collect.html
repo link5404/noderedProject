@@ -4,7 +4,7 @@
         color: '#E6E0F8',
         defaults: {
             name: { value: "" },
-            collectExpression: { value: "", required: true }
+            collectTable: { value: "", required: true }
         },
         inputs: 1,
         outputs: 1,
@@ -23,6 +23,10 @@
     <div class="form-row">
         <p>This will print the rdd</p>
     </div>
+    <div class="form-row">
+        <label for="node-input-collectTable"><i class="fa fa-table"></i> Table Name</label>
+        <input type="text" id="node-input-collectTable" placeholder="e.g: airports_data.csv">
+    </div>
 </script>
 
 <script type="text/html" data-help-name="spark-collect">
@@ -40,4 +44,5 @@
     </dl>
     <h3>Details</h3>
     <p>Use this node to add collecting criteria to your Spark operations. The collect expression should be a valid condition that will be translated to a Spark collect operation.</p>
+    <p>Specify the table name on which the collect should be applied. This should match one of the table names in your available Tables.</p>
 </script>

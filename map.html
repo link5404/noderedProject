@@ -4,7 +4,8 @@
         color: '#E6E0F8',
         defaults: {
             name: { value: "" },
-            mapExpression: { value: "", required: true }
+            mapExpression: { value: "", required: true },
+            mapTable: { value: "", required: true }
         },
         inputs: 1,
         outputs: 1,
@@ -20,6 +21,10 @@
 </script>
 
 <script type="text/html" data-template-name="spark-map">
+    <div class="form-row">
+        <label for="node-input-mapTable"><i class="fa fa-table"></i> Table Name</label>
+        <input type="text" id="node-input-mapTable" placeholder="e.g: airports_data.csv">
+    </div>
     <div class="form-row">
         <label for="node-input-mapExpression"><i class="fa fa-code"></i> map Expression</label>
         <input type="text" id="node-input-mapExpression" placeholder="lambda x: (x[0])">
@@ -42,4 +47,5 @@
     </dl>
     <h3>Details</h3>
     <p>Use this node to add maping criteria to your Spark operations. The map expression should be a valid condition that will be translated to a Spark map operation.</p>
+    <p>Specify the table name on which the map should be applied. This should match one of the table names in your available Tables.</p>
 </script>
