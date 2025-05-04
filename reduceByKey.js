@@ -5,12 +5,14 @@ module.exports = function(RED) {
         
         // Store reduce by key parameters from node configuration
         this.reduceByKeyExpression = config.reduceByKeyExpression;
+        this.reduceByKeyTable = config.reduceByKeyTable;
         
         node.on('input', function(msg) {
             if (msg.payload && typeof msg.payload === 'object') {
                 var reduceByKeyMethod = {
                     "type": "reduceByKey",
-                    "expression": this.reduceByKeyExpression
+                    "expression": this.reduceByKeyExpression,
+                    "table": this.reduceByKeyTable
                 };
                 
                 // Add reduce by key method to Methods array
@@ -27,7 +29,8 @@ module.exports = function(RED) {
     RED.nodes.registerType("spark-reduceByKey", ReduceByKeyNode, {
         defaults: {
             name: { value: "" },
-            reduceByKeyExpression: { value: "" }
+            reduceByKeyExpression: { value: "" },
+            reduceByKeyTable: { value: "", required: true }
         },
         category: "spark",
         color: "#E6E0F8",

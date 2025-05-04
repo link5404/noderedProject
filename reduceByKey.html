@@ -4,7 +4,8 @@
         color: '#E6E0F8',
         defaults: {
             name: { value: "" },
-            reduceByKeyExpression: { value: "", required: true }
+            reduceByKeyExpression: { value: "", required: true },
+            reduceByKeyTable: { value: "", required: true }
         },
         inputs: 1,
         outputs: 1,
@@ -20,6 +21,10 @@
 </script>
 
 <script type="text/html" data-template-name="spark-reduceByKey">
+    <div class="form-row">
+        <label for="node-input-reduceByKeyTable"><i class="fa fa-table"></i> Table Name</label>
+        <input type="text" id="node-input-reduceByKeyTable" placeholder="e.g: airports_data.csv">
+    </div>
     <div class="form-row">
         <label for="node-input-reduceByKeyExpression"><i class="fa fa-code"></i> ReduceByKey Expression</label>
         <input type="text" id="node-input-reduceByKeyExpression" placeholder="reduceByKey(add)">
@@ -42,4 +47,5 @@
     </dl>
     <h3>Details</h3>
     <p>Use this node to add reduceByKey criteria to your Spark operations. The reduceByKey expression should be a valid condition that will be translated to a Spark reduceByKey operation.</p>
+    <p>Specify the table name on which the reduceByKey should be applied. This should match one of the table names in your available Tables.</p>
 </script>
